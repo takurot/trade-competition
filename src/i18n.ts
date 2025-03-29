@@ -98,6 +98,10 @@ const enResources = {
     "invalidSymbol": "Invalid symbol. Please check and try again.",
     "errorFetchingPrice": "Error fetching price. Please try again later.",
     "useThisPrice": "Use This Price",
+    
+    // 日付表示
+    "unknown": "Unknown date",
+    "invalidDate": "Invalid date",
   }
 };
 
@@ -197,6 +201,10 @@ const jaResources = {
     "invalidSymbol": "無効なシンボルです。確認して再試行してください。",
     "errorFetchingPrice": "価格取得中にエラーが発生しました。後でお試しください。",
     "useThisPrice": "この価格を使用",
+    
+    // 日付表示
+    "unknown": "不明な日付",
+    "invalidDate": "無効な日付",
   }
 };
 

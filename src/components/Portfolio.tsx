@@ -88,7 +88,17 @@ const Portfolio: React.FC = () => {
       const portfoliosList: Portfolio[] = [];
       
       querySnapshot.forEach((doc) => {
-        portfoliosList.push({ id: doc.id, ...doc.data() as Omit<Portfolio, 'id'> });
+        const data = doc.data();
+        // Firestoreタイムスタンプをjsのデータに変換
+        const createdAt = data.createdAt?.toDate ? data.createdAt.toDate() : new Date(data.createdAt);
+        const updatedAt = data.updatedAt?.toDate ? data.updatedAt.toDate() : new Date(data.updatedAt);
+        
+        portfoliosList.push({ 
+          id: doc.id, 
+          ...data, 
+          createdAt,
+          updatedAt
+        } as Portfolio);
       });
       
       setPortfolios(portfoliosList);
@@ -470,6 +480,29 @@ const Portfolio: React.FC = () => {
       return <div>{t('portfolioNotFound')}</div>;
     }
     
+    // 日付が正しいフォーマットであることを確認
+    const formatDate = (date: any) => {
+      if (!date) return t('unknown');
+      
+      try {
+        // すでにDateオブジェクトの場合はそのまま使用
+        if (date instanceof Date) {
+          return date.toLocaleDateString();
+        }
+        
+        // タイムスタンプの場合は変換
+        if (typeof date === 'object' && date.seconds) {
+          return new Date(date.seconds * 1000).toLocaleDateString();
+        }
+        
+        // 文字列や数値の場合は新しいDateオブジェクトを作成
+        return new Date(date).toLocaleDateString();
+      } catch (error) {
+        console.error('Error formatting date:', error, date);
+        return t('invalidDate');
+      }
+    };
+    
     return (
       <div>
         <div className="portfolio-header">
@@ -491,7 +524,7 @@ const Portfolio: React.FC = () => {
             <strong>{t('visibility')}:</strong> 
             {portfolio.visibility === 'public' ? t('public') : t('private')}
           </p>
-          <p><strong>{t('created')}:</strong> {new Date(portfolio.createdAt).toLocaleDateString()}</p>
+          <p><strong>{t('created')}:</strong> {formatDate(portfolio.createdAt)}</p>
         </div>
         
         {/* Add Trade Form */}
