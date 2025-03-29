@@ -65,6 +65,9 @@ const enResources = {
     "trader": "Trader",
     "return": "Return",
     "strategy": "Strategy",
+    "showDemoData": "Show Demo Data",
+    "hideDemoData": "Hide Demo Data",
+    "demoDataNotice": "You are viewing demo data. Real portfolios will appear here when users create public portfolios.",
     
     // ホーム画面と大会参加
     "availableCompetitions": "Available Competitions",
@@ -161,6 +164,9 @@ const jaResources = {
     "trader": "トレーダー",
     "return": "リターン",
     "strategy": "戦略",
+    "showDemoData": "デモデータを表示",
+    "hideDemoData": "デモデータを非表示",
+    "demoDataNotice": "デモデータを表示しています。ユーザーが公開ポートフォリオを作成すると、実際のデータがここに表示されます。",
     
     // ホーム画面と大会参加
     "availableCompetitions": "参加可能な大会",
