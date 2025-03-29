@@ -88,7 +88,13 @@ const enResources = {
     // 言語設定
     "language": "Language",
     "english": "English",
-    "japanese": "日本語"
+    "japanese": "日本語",
+    
+    // 株価情報
+    "loadingPrice": "Loading price data",
+    "invalidSymbol": "Invalid symbol. Please check and try again.",
+    "errorFetchingPrice": "Error fetching price. Please try again later.",
+    "useThisPrice": "Use This Price",
   }
 };
 
@@ -178,7 +184,13 @@ const jaResources = {
     // 言語設定
     "language": "言語",
     "english": "English",
-    "japanese": "日本語"
+    "japanese": "日本語",
+    
+    // 株価情報
+    "loadingPrice": "価格データを読み込み中",
+    "invalidSymbol": "無効なシンボルです。確認して再試行してください。",
+    "errorFetchingPrice": "価格取得中にエラーが発生しました。後でお試しください。",
+    "useThisPrice": "この価格を使用",
   }
 };
 

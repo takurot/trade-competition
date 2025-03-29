@@ -734,4 +734,89 @@ tr:hover {
 
 .cancel-btn:hover {
   background-color: #ccc;
+}
+
+/* 株価情報表示 */
+.stock-price-wrapper {
+  margin-top: 8px;
+}
+
+.stock-price-container {
+  background-color: #f8f9fa;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  padding: 12px;
+  margin-top: 4px;
+  max-width: 300px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.stock-price-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  align-items: center;
+}
+
+.stock-price-symbol {
+  font-weight: bold;
+  font-size: 1.1rem;
+  color: #2c3e50;
+}
+
+.stock-price-time {
+  font-size: 0.8rem;
+  color: #7f8c8d;
+}
+
+.stock-price-main {
+  margin-bottom: 10px;
+}
+
+.stock-price-value {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 2px;
+}
+
+.stock-price-change {
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.stock-price-change.positive {
+  color: #2ecc71;
+}
+
+.stock-price-change.negative {
+  color: #e74c3c;
+}
+
+.stock-price-loading {
+  color: #7f8c8d;
+  font-style: italic;
+  padding: 8px;
+}
+
+.stock-price-error {
+  color: #e74c3c;
+  padding: 8px;
+  font-size: 0.9rem;
+}
+
+.stock-price-use-btn {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 6px 12px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  width: 100%;
+}
+
+.stock-price-use-btn:hover {
+  background-color: #2980b9;
 } 

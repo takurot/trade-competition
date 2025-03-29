@@ -5,6 +5,8 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import Navigation from './Navigation.tsx';
+import StockPrice from './StockPrice.tsx';
+import { getStockPrice } from '../services/stockApi.ts';
 import '../styles.css';
 
 interface Trade {
@@ -63,6 +65,12 @@ const Portfolio: React.FC = () => {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [portfolioToDelete, setPortfolioToDelete] = useState<string | null>(null);
 
+  // 株価情報のステート
+  const [stockInfo, setStockInfo] = useState<any>(null);
+  const [stockLoading, setStockLoading] = useState<boolean>(false);
+  const [stockError, setStockError] = useState<string | null>(null);
+  const [symbolTimer, setSymbolTimer] = useState<NodeJS.Timeout | null>(null);
+
   useEffect(() => {
     if (loading) return;
     if (!user) navigate('/');
@@ -102,7 +110,12 @@ const Portfolio: React.FC = () => {
       const tradesList: Trade[] = [];
       
       querySnapshot.forEach((doc) => {
-        tradesList.push({ id: doc.id, ...doc.data() as Omit<Trade, 'id'> });
+        tradesList.push({ 
+          id: doc.id, 
+          ...doc.data(),
+          // Firestoreから取得した日付をDateオブジェクトに変換
+          date: new Date(doc.data().date.seconds * 1000) 
+        } as Trade);
       });
       
       setTrades(tradesList);
@@ -113,6 +126,50 @@ const Portfolio: React.FC = () => {
       fetchTrades();
     }
   }, [selectedPortfolio]);
+
+  useEffect(() => {
+    // 銘柄シンボルが変更されたときに株価情報を取得
+    // 以前のタイマーをクリア
+    if (symbolTimer) {
+      clearTimeout(symbolTimer);
+    }
+    
+    // 入力が空の場合は検索しない
+    if (!newTrade.symbol || newTrade.symbol.length < 1) {
+      setStockInfo(null);
+      setStockError(null);
+      return;
+    }
+    
+    // 入力から500ms後に検索を実行（タイピング中の過剰なAPI呼び出しを防止）
+    const timer = setTimeout(async () => {
+      setStockLoading(true);
+      setStockError(null);
+      
+      try {
+        const data = await getStockPrice(newTrade.symbol);
+        
+        if (data) {
+          setStockInfo(data);
+          // 株価を自動的に入力欄にセット（オプション）
+          // setNewTrade(prev => ({ ...prev, price: data.price }));
+        } else {
+          setStockError(t('invalidSymbol'));
+        }
+      } catch (error) {
+        setStockError(t('errorFetchingPrice'));
+      } finally {
+        setStockLoading(false);
+      }
+    }, 500);
+    
+    setSymbolTimer(timer);
+    
+    // クリーンアップ関数
+    return () => {
+      if (timer) clearTimeout(timer);
+    };
+  }, [newTrade.symbol, t]);
 
   const calculateRelativeReturn = (tradesList: Trade[]) => {
     if (!selectedPortfolio || tradesList.length === 0) return;
@@ -270,6 +327,14 @@ const Portfolio: React.FC = () => {
   const handleCancelDelete = () => {
     setShowDeleteConfirm(false);
     setPortfolioToDelete(null);
+  };
+
+  // 株価情報を価格欄に反映
+  const useStockPrice = (price: number) => {
+    setNewTrade(prev => ({
+      ...prev,
+      price
+    }));
   };
 
   if (loading) return <div>{t('loading')}</div>;
@@ -440,6 +505,18 @@ const Portfolio: React.FC = () => {
               value={newTrade.symbol}
               onChange={(e) => setNewTrade({...newTrade, symbol: e.target.value.toUpperCase()})}
             />
+            
+            {/* 株価情報表示 */}
+            {(stockLoading || stockInfo || stockError) && (
+              <div className="stock-price-wrapper">
+                <StockPrice 
+                  data={stockInfo}
+                  loading={stockLoading}
+                  error={stockError}
+                  onUsePrice={useStockPrice}
+                />
+              </div>
+            )}
           </div>
           
           <div className="form-group">
