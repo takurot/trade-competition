@@ -1,0 +1,9 @@
+{
+  "short_name": "Trade Comp",
+  "name": "Day Trading Competition",
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#2c3e50",
+  "background_color": "#f7f9fc",
+  "description": "Create and manage your trading portfolio, compete with others, and track your performance."
+} 
